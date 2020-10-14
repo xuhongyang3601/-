@@ -22,7 +22,7 @@
     <br />
   </div>
 </template>
-<style  scoped>
+<style scoped>
 .con {
   width: 100%;
   height: 100%;
@@ -126,7 +126,7 @@ export default {
           formdata.append("avatar", this.e.target.files[0]);
           formdata.append("uid", this.uid);
           formdata.append("dtext", this.text);
-          this.axios.post("/api//dynamic", formdata).then((res) => {
+          this.axios.post("/api/dynamic", formdata).then((res) => {
             this.text = "";
             this.data = "";
             this.$toast("发布成功");

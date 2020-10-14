@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import Tabbar from "../components/Tabbar";
 export default {
   components: { Tabbar },
@@ -100,7 +100,27 @@ export default {
       busy: false,
     };
   },
+  created() {
+    if (this.first) {
+      this.now().then(() => {
+        this.axios
+          .get("/api/indexData", {
+            params: {
+              cname: this.cname,
+              pname: this.pname,
+            },
+          })
+          .then((res) => {
+            this.data = res.data.data[0];
+            this.changeFirst();
+          });
+      });
+    }
+  },
   mounted() {
+    // 获取当前用户地址
+    // this.add([province, city]);
+
     // 获取当前全国的疫情信息
     let instance = echarts.init(this.$refs.total, "vintage");
     this.axios.get("/api/total").then((res) => {
@@ -204,6 +224,7 @@ export default {
       })
       .then((res) => {
         this.data = res.data.data[0];
+        console.log(1);
       });
     // 获取首页文章信息
     this.axios
@@ -246,12 +267,17 @@ export default {
           this.$indicator.close();
         });
     },
+    ...mapMutations(["add", "changeFirst"]),
+    ...mapActions(["now"]),
   },
   watch: {
     page(val) {},
+    cname() {
+      console.log(1);
+    },
   },
   computed: {
-    ...mapState(["cname", "pname"]),
+    ...mapState(["cname", "pname", "first"]),
   },
 };
 </script>
